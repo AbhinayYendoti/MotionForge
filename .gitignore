@@ -1,0 +1,20 @@
+.next
+node_modules
+.env
+.env*.local
+dist
+out
+coverage
+public/uploads/*
+public/renders/*
+!public/uploads/.gitkeep
+!public/renders/.gitkeep
+
+# Backend temp files
+backend/.render-jobs/*
+backend/**/__pycache__/
+backend/**/*.pyc
+backend/**/*.pyo
+backend/.dev-server.log
+backend/.next-dev.log
+*.tsbuildinfo

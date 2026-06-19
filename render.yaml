@@ -1,0 +1,68 @@
+services:
+  - type: web
+    name: motionforge-api
+    runtime: python
+    plan: starter
+    rootDir: backend
+    buildCommand: >-
+      pip install -r requirements.txt &&
+      npm ci --prefix .. &&
+      python -m alembic upgrade head
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+    envVars:
+      # ── Runtime version ────────────────────────────────────────────────────
+      - key: PYTHON_VERSION
+        value: "3.12.4"
+      - key: NODE_VERSION
+        value: "22"
+
+      # ── Database ────────────────────────────────────────────────────────────
+      - key: DATABASE_URL
+        sync: false   # Set manually in Render dashboard — never commit this value
+
+      # ── Clerk authentication ─────────────────────────────────────────────────
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+        sync: false
+
+      # ── NVIDIA Build API ─────────────────────────────────────────────────────
+      - key: NVIDIA_API_KEY
+        sync: false
+      - key: NVIDIA_BASE_URL
+        value: "https://integrate.api.nvidia.com/v1"
+      - key: NVIDIA_TEXT_MODEL
+        value: "meta/llama-3.1-70b-instruct"
+      - key: NVIDIA_VISION_MODEL
+        value: "meta/llama-3.2-90b-vision-instruct"
+      - key: NVIDIA_EVALUATION_MODEL
+        value: "nvidia/nemotron-4-340b-instruct"
+      - key: NVIDIA_REQUEST_TIMEOUT
+        value: "30"
+      - key: NVIDIA_MAX_ATTEMPTS
+        value: "2"
+
+      # ── UploadThing ──────────────────────────────────────────────────────────
+      - key: UPLOADTHING_TOKEN
+        sync: false
+      - key: UPLOADTHING_SECRET
+        sync: false
+      - key: UPLOADTHING_APP_ID
+        sync: false
+
+      # ── CORS / App URL ───────────────────────────────────────────────────────
+      # Set BACKEND_CORS_ORIGINS to your Vercel frontend URL, e.g.:
+      #   https://motionforge.vercel.app
+      - key: BACKEND_CORS_ORIGINS
+        sync: false
+      - key: APP_URL
+        sync: false
+
+      # ── Render subprocess ────────────────────────────────────────────────────
+      - key: NODE_BINARY
+        value: "node"
+
+      # ── Auth bypass — MUST be false in production ─────────────────────────────
+      - key: MOTIONFORGE_AUTH_BYPASS
+        value: "false"

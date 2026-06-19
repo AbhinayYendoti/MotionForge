@@ -1,0 +1,100 @@
+
+> motionforge-ai@1.0.0 dev
+> next dev
+
+   ▲ Next.js 15.5.19
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.39:3000
+   - Environments: .env
+   - Experiments (use with caution):
+     · serverActions
+
+ ✓ Starting...
+ ✓ Ready in 8s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 3.6s (222 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (192kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ ○ Compiling / ...
+ ✓ Compiled / in 27.7s (1868 modules)
+ GET / 200 in 31471ms
+ POST / 200 in 88ms
+ GET / 200 in 653ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 4.7s (1925 modules)
+ GET /dashboard 200 in 10042ms
+ GET /dashboard 200 in 17142ms
+ GET /dashboard 200 in 10760ms
+ GET /dashboard 200 in 11136ms
+ GET /dashboard 200 in 8778ms
+ ○ Compiling /projects/new ...
+ ✓ Compiled /projects/new in 3.5s (1951 modules)
+ GET /projects/new 200 in 4878ms
+ GET /projects/new 200 in 271ms
+ GET /projects/new 200 in 250ms
+ GET /projects/new 200 in 251ms
+ GET /projects/new 200 in 213ms
+ GET /projects/new 200 in 158ms
+ ⨯ Error [ZodError]: [
+  {
+    "code": "too_big",
+    "maximum": 1000,
+    "type": "string",
+    "inclusive": true,
+    "exact": false,
+    "message": "String must contain at most 1000 character(s)",
+    "path": [
+      "prompt"
+    ]
+  }
+]
+    at createProjectAction (src\features\projects\actions.ts:11:38)
+   9 | export async function createProjectAction(formData: FormData) {
+  10 |   await requireUser();
+> 11 |   const parsed = createProjectSchema.parse({
+     |                                      ^
+  12 |     title: formData.get("title"),
+  13 |     prompt: formData.get("prompt") ?? undefined,
+  14 |     imageUrl: formData.get("imageUrl") || undefined {
+  issues: [Array],
+  addIssue: [Function (anonymous)],
+  addIssues: [Function (anonymous)],
+  digest: '1479983454'
+}
+ POST /projects/new 500 in 4838ms
+ ⨯ TypeError: Body is unusable: Body has already been read
+    at backendFetch (src\lib\backend.ts:120:31)
+    at async createProjectAction (src\features\projects\actions.ts:27:19)
+  118 |       detail = body.detail ?? detail;
+  119 |     } catch {
+> 120 |       detail = await response.text();
+      |                               ^
+  121 |     }
+  122 |     throw new Error(detail);
+  123 |   } {
+  digest: '339152558'
+}
+ POST /projects/new 500 in 6059ms
+ ✓ Compiled in 8.1s (1965 modules)
+ GET /projects/new 200 in 1235ms
+ ✓ Compiled in 2.4s (1965 modules)
+ GET /projects/new 200 in 939ms
+ ✓ Compiled in 1674ms (1965 modules)
+ GET /projects/new 200 in 485ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 9.3s (1970 modules)
+ GET /projects/new 404 in 11331ms
+ GET /projects/new 200 in 432ms
+ GET /projects/new 404 in 1823ms
+ GET /dashboard 404 in 1024ms
+ GET / 200 in 4012ms
+ ✓ Compiled in 9.9s (785 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: EPERM: operation not permitted, rename 'C:\Users\HP\Downloads\Projects\MotionForgeAI\.next\cache\webpack\client-development\6.pack.gz_' -> 'C:\Users\HP\Downloads\Projects\MotionForgeAI\.next\cache\webpack\client-development\6.pack.gz'
+ ✓ Compiled in 9.1s (785 modules)
+ ✓ Compiled in 764ms (785 modules)
+ ✓ Compiled in 1582ms (785 modules)
+ ✓ Compiled in 654ms (785 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\HP\Downloads\Projects\MotionForgeAI\.next\cache\webpack\client-development\0.pack.gz_' -> 'C:\Users\HP\Downloads\Projects\MotionForgeAI\.next\cache\webpack\client-development\0.pack.gz'
+ ✓ Compiled in 2.6s (771 modules)
+ ✓ Compiled in 2.3s (785 modules)
+ ✓ Compiled in 2.8s (785 modules)
+ ✓ Compiled in 15.4s (785 modules)
