@@ -13,7 +13,7 @@ export function ProjectCreateForm() {
     // In production, we must use UploadThing to store the image and get a CDN URL.
     if (file && file.size > 0) {
       try {
-        const [res] = await uploadFiles("imageUploader", {
+        const [res] = await uploadFiles("creativeImage", {
           files: [file],
         });
         formData.set("imageUrl", res.url);
