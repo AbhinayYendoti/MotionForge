@@ -1,11 +1,34 @@
+"use client";
+
 import { createProjectAction } from "../actions";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { SubmitButton } from "./submit-button";
+import { uploadFiles } from "@/lib/uploadthing";
 
 export function ProjectCreateForm() {
+  async function handleSubmit(formData: FormData) {
+    const file = formData.get("file") as File | null;
+    
+    // In production, we must use UploadThing to store the image and get a CDN URL.
+    if (file && file.size > 0) {
+      try {
+        const [res] = await uploadFiles("imageUploader", {
+          files: [file],
+        });
+        formData.set("imageUrl", res.url);
+        formData.delete("file");
+      } catch (err) {
+        alert("Image upload failed. Please try again.");
+        return;
+      }
+    }
+    
+    await createProjectAction(formData);
+  }
+
   return (
-    <form action={createProjectAction} className="grid gap-7">
+    <form action={handleSubmit} className="grid gap-7">
       <div>
         <label className="eyebrow mb-3 block" htmlFor="title">
           Project title
