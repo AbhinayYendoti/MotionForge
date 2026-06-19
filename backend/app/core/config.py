@@ -62,6 +62,9 @@ class Settings(BaseSettings):
 
         if not self.database_url or self.database_url == placeholder_db:
             problems.append("DATABASE_URL — must be a valid PostgreSQL connection string")
+        elif self.database_url.startswith("postgresql://"):
+            # Transparently upgrade the URL to use psycopg 3 instead of default psycopg2
+            self.database_url = self.database_url.replace("postgresql://", "postgresql+psycopg://", 1)
         if not self.clerk_secret_key or self.clerk_secret_key in ("", "your_clerk_secret_key"):
             problems.append("CLERK_SECRET_KEY — Clerk backend secret (sk_test_... / sk_live_...)")
         if not self.nvidia_api_key or self.nvidia_api_key in ("", "your_nvidia_api_key"):
