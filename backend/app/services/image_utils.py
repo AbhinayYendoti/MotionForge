@@ -54,6 +54,20 @@ def image_size(path: Path | None, image_url: str | None = None) -> tuple[int, in
     return 1080, 1080
 
 
+def _encode_resized_image(data: bytes, max_size: int = 1024) -> str:
+    """Resize image if too large and encode as base64 JPEG."""
+    with Image.open(io.BytesIO(data)) as img:
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
+        if max(img.width, img.height) > max_size:
+            img.thumbnail((max_size, max_size), Image.Resampling.LANCZOS)
+        
+        buffer = io.BytesIO()
+        img.save(buffer, format="JPEG", quality=85)
+        encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
+        return f"data:image/jpeg;base64,{encoded}"
+
+
 def to_vision_url(image_url: str) -> str:
     """Convert an image URL to a base64 data URI for NVIDIA vision models.
 
@@ -66,23 +80,19 @@ def to_vision_url(image_url: str) -> str:
     # ── Attempt 1: local file ─────────────────────────────────────────────
     path = public_path_from_url(image_url)
     if path and path.exists():
-        suffix = path.suffix.lower()
-        mime = "image/jpeg" if suffix in {".jpg", ".jpeg"} else "image/webp" if suffix == ".webp" else "image/png"
-        return f"data:{mime};base64,{base64.b64encode(path.read_bytes()).decode()}"
+        try:
+            return _encode_resized_image(path.read_bytes())
+        except Exception:
+            pass
 
     # ── Attempt 2: remote URL (production CDN) ────────────────────────────
     if image_url.startswith("http"):
         raw = _download_image_bytes(image_url)
         if raw:
-            # Detect mime type from the bytes themselves using Pillow
             try:
-                with Image.open(io.BytesIO(raw)) as img:
-                    fmt = (img.format or "PNG").upper()
-                    mime_map = {"JPEG": "image/jpeg", "PNG": "image/png", "WEBP": "image/webp"}
-                    mime = mime_map.get(fmt, "image/png")
+                return _encode_resized_image(raw)
             except Exception:
-                mime = "image/png"
-            return f"data:{mime};base64,{base64.b64encode(raw).decode()}"
+                pass
 
     # ── Fallback: return URL unchanged, let NVIDIA try it directly ────────
     return image_url
