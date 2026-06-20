@@ -8,6 +8,7 @@ import { PipelineRail } from "@/features/projects/components/pipeline-rail";
 import { ProjectAutoRefresh } from "@/features/projects/components/project-auto-refresh";
 import { RunPipelineForm } from "@/features/projects/components/run-pipeline-form";
 import { JsonPanel } from "@/features/projects/components/json-panel";
+import { DeleteProjectForm } from "@/features/projects/components/delete-project-form";
 import { Badge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/ui/link-button";
 import { SiteNav } from "@/components/layout/site-nav";
@@ -78,6 +79,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                   <Download className="mr-2 h-5 w-5" /> Download MP4
                 </LinkButton>
               ) : null}
+              <div className="mt-2">
+                <DeleteProjectForm projectId={project.id} />
+              </div>
             </div>
           </div>
         </section>

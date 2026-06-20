@@ -166,3 +166,9 @@ export function runPipeline(projectId: string, format: string) {
     body: JSON.stringify({ projectId, format })
   });
 }
+
+export function deleteProject(projectId: string) {
+  return backendFetch<{ success: boolean }>(`/project/${projectId}`, {
+    method: "DELETE"
+  });
+}

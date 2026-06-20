@@ -134,3 +134,15 @@ async def run_pipeline_endpoint(
         background_tasks.add_task(run_pipeline_job, project.id, user.id, payload.format)
     project = _project_or_404(db, user, payload.projectId)
     return {"project": project_repo.serialize_project(project), "renderId": None, "queued": True}
+
+
+@router.delete("/project/{project_id}")
+def delete_project(
+    project_id: str,
+    db: Annotated[Session, Depends(get_db)],
+    user: Annotated[models.User, Depends(get_current_db_user)],
+):
+    project = _project_or_404(db, user, project_id)
+    db.delete(project)
+    db.commit()
+    return {"success": True}

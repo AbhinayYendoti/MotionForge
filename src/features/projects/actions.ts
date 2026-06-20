@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import { requireUser } from "@/lib/auth";
 import { createProjectSchema } from "@/lib/schemas";
-import { createProject, runPipeline } from "@/lib/backend";
+import { createProject, runPipeline, deleteProject } from "@/lib/backend";
 
 export async function createProjectAction(formData: FormData) {
   await requireUser();
@@ -48,4 +48,14 @@ export async function runPipelineAction(formData: FormData) {
   await runPipeline(projectId, format);
   revalidatePath(`/projects/${projectId}`);
   redirect(`/projects/${projectId}`);
+}
+
+export async function deleteProjectAction(formData: FormData) {
+  await requireUser();
+  const projectId = String(formData.get("projectId") ?? "");
+  if (!projectId) throw new Error("Project ID is required.");
+  
+  await deleteProject(projectId);
+  revalidatePath("/dashboard");
+  redirect("/dashboard");
 }
