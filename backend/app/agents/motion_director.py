@@ -23,13 +23,18 @@ async def run_motion_director_agent(storyboard: Storyboard, layers: LayerExtract
         for scene_index, scene in enumerate(storyboard.scenes):
             start = scene_index * 90
             for layer_index, layer in enumerate(layers.layers[:4]):
+                translate_y_start = 24 if layer_index % 2 == 0 else -18
                 animations.append(
                     {
                         "sceneId": scene.id,
                         "layerId": layer.id,
                         "fromFrame": start,
                         "toFrame": start + max(30, round(scene.durationSeconds * 30)),
-                        "transform": {"translateY": (24 if layer_index % 2 == 0 else -18, 0), "scale": (0.98, 1.04), "opacity": (0, 1)},
+                        "transform": {
+                            "translateY": [translate_y_start, 0],
+                            "scale": [0.98, 1.04],
+                            "opacity": [0, 1],
+                        },
                         "easing": "easeOut",
                     }
                 )

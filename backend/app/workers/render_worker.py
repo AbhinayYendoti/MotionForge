@@ -75,12 +75,18 @@ def run_render_job(render_id: str) -> None:
         # ── Store the video — UploadThing in production, local path in dev ────
         video_url: str
         if settings.uploadthing_secret:
-            # Production: upload MP4 to UploadThing CDN
+            # Production: upload MP4 to UploadThing CDN.
+            # Read bytes into memory BEFORE we enter the finally cleanup block,
+            # so that the finally block cannot delete the file while S3 is still
+            # receiving data if we ever switch to a streaming upload.
             from app.services.uploadthing_service import upload_file_to_ut  # lazy import
 
             logger.info("Uploading rendered MP4 to UploadThing", extra={"render_id": render_id})
             video_url = upload_file_to_ut(settings.uploadthing_secret, output_path, output_name)
-            # Local temp file is cleaned up in the finally block below.
+            # Upload is fully confirmed — safe to delete the local temp file now.
+            # We set output_path to None so the finally block doesn't double-delete.
+            _cleanup_file(output_path)
+            output_path = None
         else:
             # Development fallback: serve via Next.js /public/renders/ static route.
             video_url = f"/renders/{output_name}"

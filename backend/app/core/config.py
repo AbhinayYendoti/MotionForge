@@ -30,8 +30,8 @@ class Settings(BaseSettings):
     nvidia_base_url: str = Field(default="https://integrate.api.nvidia.com/v1", alias="NVIDIA_BASE_URL")
     nvidia_text_model: str = Field(default="meta/llama-3.1-70b-instruct", alias="NVIDIA_TEXT_MODEL")
     nvidia_vision_model: str = Field(default="meta/llama-3.2-90b-vision-instruct", alias="NVIDIA_VISION_MODEL")
-    nvidia_evaluation_model: str = Field(default="nvidia/nemotron-4-340b-instruct", alias="NVIDIA_EVALUATION_MODEL")
-    nvidia_request_timeout: float = Field(default=25, alias="NVIDIA_REQUEST_TIMEOUT")
+    nvidia_evaluation_model: str = Field(default="meta/llama-3.1-70b-instruct", alias="NVIDIA_EVALUATION_MODEL")
+    nvidia_request_timeout: float = Field(default=60, alias="NVIDIA_REQUEST_TIMEOUT")
     nvidia_max_attempts: int = Field(default=2, alias="NVIDIA_MAX_ATTEMPTS")
 
     # ── UploadThing ───────────────────────────────────────────────────────────

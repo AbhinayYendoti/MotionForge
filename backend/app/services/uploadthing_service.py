@@ -84,7 +84,7 @@ def upload_file_to_ut(secret: str, path: Path, file_name: str | None = None) -> 
             key: str = file_info["key"]
             presigned_urls: list[str] = file_info["presignedUrls"]
             # fileUrl may already be returned by the API (v6 sometimes includes it)
-            cdn_url: str = file_info.get("fileUrl") or f"https://utfs.io/f/{key}"
+            cdn_url: str = file_info.get("fileUrl") or f"https://ufs.sh/f/{key}"
             polling_url: str | None = file_info.get("pollingUrl")
             polling_jwt: str | None = file_info.get("pollingJwt")
         except (KeyError, IndexError, TypeError) as exc:

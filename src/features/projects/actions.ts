@@ -24,7 +24,10 @@ export async function createProjectAction(formData: FormData) {
   }
 
   const file = formData.get("file");
-  if (!(file instanceof File && file.size > 0) && !parsed.imageUrl) {
+  if (file instanceof File && file.size > 0) {
+    throw new Error("Direct file uploads are disabled in production. Please check your network connection and try again.");
+  }
+  if (!parsed.imageUrl) {
     throw new Error("Upload an image or provide a remote image URL.");
   }
 
@@ -32,7 +35,6 @@ export async function createProjectAction(formData: FormData) {
   backendForm.set("title", parsed.title);
   if (parsed.prompt) backendForm.set("prompt", parsed.prompt);
   if (parsed.imageUrl) backendForm.set("imageUrl", parsed.imageUrl);
-  if (file instanceof File && file.size > 0) backendForm.set("file", file);
   const project = await createProject(backendForm);
 
   revalidatePath("/dashboard");

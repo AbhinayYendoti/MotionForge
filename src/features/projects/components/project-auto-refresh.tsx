@@ -11,7 +11,12 @@ export function ProjectAutoRefresh({ status }: { status: string }) {
   useEffect(() => {
     if (!ACTIVE_STATUSES.has(status)) return;
     const interval = window.setInterval(() => router.refresh(), 4000);
-    return () => window.clearInterval(interval);
+    // Stop polling after 5 minutes to prevent infinite loops if backend hangs
+    const timeout = window.setTimeout(() => window.clearInterval(interval), 5 * 60 * 1000);
+    return () => {
+      window.clearInterval(interval);
+      window.clearTimeout(timeout);
+    };
   }, [router, status]);
 
   return null;

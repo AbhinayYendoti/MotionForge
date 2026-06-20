@@ -56,7 +56,7 @@ async def _detect_product_bounds_ai(image_url: str, img_w: int, img_h: int) -> _
 
 
 async def run_layer_extraction_engine(image_url: str, ocr: OcrResult | None) -> LayerExtraction:
-    width, height = image_size(public_path_from_url(image_url))
+    width, height = image_size(public_path_from_url(image_url), image_url=image_url)
 
     # ── Attempt AI-powered product bounding box detection ─────────────────
     product_x = round(width * 0.18)

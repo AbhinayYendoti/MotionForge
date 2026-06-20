@@ -187,7 +187,7 @@ def serialize_project(project: models.Project) -> dict[str, Any]:
                 "createdAt": dt(item.created_at),
                 "updatedAt": dt(item.updated_at),
             }
-            for item in project.renders
+            for item in sorted(project.renders, key=lambda r: r.created_at, reverse=True)
         ],
         "pipeline": [
             {
