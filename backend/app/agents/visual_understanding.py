@@ -29,9 +29,13 @@ async def run_visual_understanding_agent(image_url: str, prompt: str | None) -> 
         )
     except Exception as error:
         logger.warning("Visual analysis failed; using simplified fallback analysis", extra={"error": str(error)})
+        # NOTE: Do NOT use `prompt` as the product — the raw user prompt is a
+        # creative direction string (e.g. "Create a premium tech reel...") and
+        # would be displayed verbatim as on-screen text in the video. We always
+        # fall back to a generic product label here.
         return VisualAnalysis.model_validate(
             {
-                "product": prompt or "Uploaded creative",
+                "product": "Featured Product",
                 "brand": None,
                 "colors": ["#000000", "#ffffff"],
                 "detectedText": [],
